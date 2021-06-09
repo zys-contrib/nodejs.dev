@@ -17,7 +17,16 @@ exports.createPages = ({ graphql, actions }) => {
           {
             allMarkdownRemark(
               filter: {
-                fields: { slug: { nin: ["", "nodejs-community", "homepage"] } }
+                fields: {
+                  slug: {
+                    nin: [
+                      ""
+                      "nodejs-community"
+                      "homepage"
+                      "trademark-policy"
+                    ]
+                  }
+                }
               }
               sort: { fields: [fileAbsolutePath], order: ASC }
             ) {
@@ -36,6 +45,7 @@ exports.createPages = ({ graphql, actions }) => {
                     description
                     authors
                     section
+                    category
                   }
                   fields {
                     slug
@@ -73,7 +83,7 @@ exports.createPages = ({ graphql, actions }) => {
         edges.forEach(({ node }, index) => {
           const {
             fields: { slug },
-            frontmatter: { title, section },
+            frontmatter: { title, section, category },
             parent: { relativePath },
           } = node;
 
@@ -98,13 +108,19 @@ exports.createPages = ({ graphql, actions }) => {
 
           let data;
           if (!navigationData[section]) {
-            data = { title, slug, section };
-            navigationData = { ...navigationData, [section]: [data] };
-          } else {
-            data = { title, slug, section };
+            data = { title, slug, section, category };
             navigationData = {
               ...navigationData,
-              [section]: [...navigationData[section], data],
+              [section]: { data: [data], category },
+            };
+          } else {
+            data = { title, slug, section, category };
+            navigationData = {
+              ...navigationData,
+              [section]: {
+                data: [...navigationData[section].data, data],
+                category: navigationData[section].category,
+              },
             };
           }
           docPages.push({
@@ -112,6 +128,7 @@ exports.createPages = ({ graphql, actions }) => {
             next: nextNodeData,
             previous: previousNodeData,
             relativePath,
+            category,
           });
         });
 
@@ -122,15 +139,16 @@ exports.createPages = ({ graphql, actions }) => {
             previous: page.previous,
             relativePath: page.relativePath,
             navigationData,
+            category: page.category,
           };
 
-          if (page.slug.includes('/blog/')) {
+          if (page.category === 'blog') {
             createPage({
               path: page.slug,
               component: blogTemplate,
               context,
             });
-          } else {
+          } else if (page.category === 'learn') {
             createPage({
               path: `/learn/${page.slug}`,
               component: docTemplate,

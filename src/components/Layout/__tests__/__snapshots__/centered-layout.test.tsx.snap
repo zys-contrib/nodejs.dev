@@ -143,6 +143,13 @@ exports[`CenteredLayout component renders correctly with footer 1`] = `
   >
     mock-children
   </main>
+  <section
+    class="bottom-info"
+  >
+    <div
+      class="random-contributor"
+    />
+  </section>
   <footer
     class="footer"
   >
@@ -152,7 +159,7 @@ exports[`CenteredLayout component renders correctly with footer 1`] = `
       <li>
         <a
           class="footer__link"
-          href="https://nodejs.org/en/about/trademark/"
+          href="/trademark"
         >
           Trademark Policy
         </a>

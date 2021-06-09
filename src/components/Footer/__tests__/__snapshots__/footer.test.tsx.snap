@@ -2,6 +2,13 @@
 
 exports[`Tests for Footer component renders correctly 1`] = `
 <div>
+  <section
+    class="bottom-info"
+  >
+    <div
+      class="random-contributor"
+    />
+  </section>
   <footer
     class="footer"
   >
@@ -11,7 +18,7 @@ exports[`Tests for Footer component renders correctly 1`] = `
       <li>
         <a
           class="footer__link"
-          href="https://nodejs.org/en/about/trademark/"
+          href="/trademark"
         >
           Trademark Policy
         </a>
